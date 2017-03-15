@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * @author Frank Nimphius
+ * @copyright Copyright (c) 2015 Oracle. All rights reserved.
+-->
+<amx:view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:amx="http://xmlns.oracle.com/adf/mf/amx"
+          xmlns:dvtm="http://xmlns.oracle.com/adf/mf/amx/dvt">
+  <amx:panelPage id="pp1">
+    <amx:facet name="header">
+      <amx:outputText value="Incident Detail Page" id="ot1"/>
+    </amx:facet>
+    <amx:facet name="primary">
+      <amx:commandButton id="cb1" text="Back" action="#{viewScope.sRDetailBacking.backNavigation}"/>
+    </amx:facet>
+        <amx:panelStretchLayout id="psl1">
+          <amx:facet name="top">
+           <!-- show select button only if there is an image associated with the service request -->
+        <amx:panelGroupLayout id="pgl4" layout="vertical" styleClass="width:100%"> 
+           <amx:panelGroupLayout id="pgl1" layout="horizontal" halign="end" inlineStyle="width:100%; padding-bottom:5px; height:40px; background-color:#e7e7e7;">
+        <amx:outputText value="Welcome #{pageFlowScope.authenticationHandler.username != null? pageFlowScope.authenticationHandler.username :'anonymous'}" id="ot11"
+                        inlineStyle="white-space:nowrap; font-size:large;"/>
+        <amx:spacer id="s1" width="10"/>
+        <amx:commandLink text="" id="cl1" shortDesc="Exit command" action="logout"
+                         actionListener="#{bindings.clearCacheIncidentData.execute}">
+          <amx:image id="i1" source="/images/application/func_arrowdoor_16_ena@2x.png" shortDesc="Exit icon"
+                     inlineStyle="width:32px; height:32px;"/>
+        </amx:commandLink>
+        <amx:spacer id="s2" width="10"/>
+      </amx:panelGroupLayout>
+          <amx:selectOneButton id="sob1" value="#{viewScope.sRDetailBacking.serviceDetailView}"
+                               shortDesc="Panel Switcher" disabled="#{bindings.remoteImgLink.inputValue == null}">
+            <amx:selectItem id="si1" label="Incident # #{bindings.id.inputValue} Details" value="details"/>
+            <amx:selectItem label="Show Image" id="si2" value="photo"/>
+            <amx:selectItem label="Status Update &amp; Notes" id="si3" value="update"/>
+          </amx:selectOneButton>
+        </amx:panelGroupLayout>
+      </amx:facet>
+          <amx:facet name="center">
+            <amx:deck id="d1" displayedChild="#{viewScope.sRDetailBacking.serviceDetailView}" shortDesc="Detail Information Container">
+              <amx:panelGroupLayout id="details" inlineStyle="width:100%;">
+                <amx:panelFormLayout id="pfl4">
+                  <amx:panelLabelAndMessage label="Problem Statement" id="plam9">
+                    <amx:panelGroupLayout id="pgl11" layout="horizontal">
+                      <amx:outputText value="#{bindings.id.inputValue}" id="ot7">
+                        <amx:convertNumber groupingUsed="false" id="cn1"/>
+                      </amx:outputText>
+                      <amx:spacer id="s11" width="10"/>
+                      <amx:outputText value="#{bindings.title.inputValue}" id="ot10"/>
+                    </amx:panelGroupLayout>
+                  </amx:panelLabelAndMessage>
+                  <amx:panelLabelAndMessage label="Created On" id="plam2">
+                    <amx:outputText value="#{bindings.createdOn.inputValue}" id="ot3">
+                      <amx:convertDateTime pattern="#{bindings.createdOn.format}" id="cdt1"/>
+                    </amx:outputText>
+                  </amx:panelLabelAndMessage>
+                </amx:panelFormLayout>
+                <amx:panelFormLayout id="pfl1">
+                  <amx:panelLabelAndMessage label="Priority" id="plam8">
+                    <amx:outputText value="#{bindings.priority.inputValue}" id="ot9"/>
+                  </amx:panelLabelAndMessage>
+                  <amx:panelLabelAndMessage label="Request Status" id="plam11">
+                    <amx:outputText value="#{bindings.status.inputValue}" id="ot12"/>
+                  </amx:panelLabelAndMessage>
+                  <amx:panelLabelAndMessage label="Drive Time" id="plam4">
+                   <amx:outputText value="#{pageFlowScope.taskFlowHelper.drivingTime}" id="ot5"/>
+                  </amx:panelLabelAndMessage>
+                </amx:panelFormLayout>
+                <amx:panelFormLayout id="pfl3">
+                  <amx:panelLabelAndMessage label="Customer" id="plam1">
+                    <amx:outputText value="#{bindings.customerName.inputValue}" id="ot2"/>
+                  </amx:panelLabelAndMessage>
+                  <amx:panelLabelAndMessage label="Street" id="plam7">
+                    <amx:outputText value="#{bindings.street.inputValue}" id="ot8"/>
+                  </amx:panelLabelAndMessage>
+                  <amx:panelLabelAndMessage label="City" id="plam10">
+                    <amx:outputText value="#{bindings.city.inputValue}" id="ot13"/>
+                  </amx:panelLabelAndMessage>
+                  <amx:panelLabelAndMessage label="Postal Code" id="plam3">
+                    <amx:outputText value="#{bindings.postalCode.inputValue}" id="ot4"/>
+                  </amx:panelLabelAndMessage>
+                </amx:panelFormLayout>
+                <amx:panelGroupLayout id="pgl5" layout="vertical">
+                  <amx:spacer id="s3" height="5"/>
+                  <amx:outputText value="Map View of Distance" id="ot14"/>
+                  <amx:spacer id="s4" height="5"/>
+                  <dvtm:geographicMap id="geomp1" shortDesc="Geomap" mapType="ROADMAP" initialZooming="auto"
+                                      animationOnDisplay="auto" inlineStyle="height:400px;">
+                    <dvtm:pointDataLayer id="pdl1" dataSelection="none">
+                      <dvtm:pointLocation id="pl1" type="address"
+                                          address="#{bindings.street.inputValue}, #{bindings.city.inputValue}">
+                        <dvtm:marker id="m1" shortDesc="Contact Location"
+                                     source="/images/application/customer_map.png"/>
+                      </dvtm:pointLocation>
+                    </dvtm:pointDataLayer>
+                    <dvtm:pointDataLayer id="pdl2" dataSelection="none">
+                      <dvtm:pointLocation id="pl2" type="pointXY" pointX="#{bindings.technicianLocationLong.inputValue}"
+                                          pointY="#{bindings.technicianLocationLat.inputValue}">
+                        <dvtm:marker id="m3" shortDesc="Technician Location"
+                                     source="/images/application/technician_map.png"/>
+                      </dvtm:pointLocation>
+                    </dvtm:pointDataLayer>
+                  </dvtm:geographicMap>
+                </amx:panelGroupLayout>
+              </amx:panelGroupLayout>
+              <amx:panelGroupLayout id="photo" inlineStyle="width:100%;">
+                <amx:panelFormLayout id="pfl2">
+                <amx:panelLabelAndMessage label="SR Number" id="plam62">
+                    <amx:outputText value="#{bindings.id.inputValue}" id="ot72">
+                      <amx:convertNumber groupingUsed="false" id="cn2"/>
+                    </amx:outputText>
+                  </amx:panelLabelAndMessage>
+                  <amx:panelLabelAndMessage label="Problem Statement" id="plam92">
+                    <amx:outputText value="#{bindings.title.inputValue}" id="ot102"/>
+                  </amx:panelLabelAndMessage>
+                  <amx:panelLabelAndMessage label="Image" id="plam5">
+                    <amx:image id="img1" source="#{viewScope.sRDetailBacking.base64EncodedIncidentPhoto}"
+                               shortDesc="#{bindings.id.inputValue}"/>
+                  </amx:panelLabelAndMessage>
+                </amx:panelFormLayout>
+              </amx:panelGroupLayout>
+          <amx:panelGroupLayout id="update" layout="vertical" inlineStyle="width:100%;" halign="center"
+                                scrollPolicy="scroll">
+            <amx:panelFormLayout id="f12" labelWidth="30%" fieldWidth="70%">
+              <amx:inputText value="#{bindings.id.inputValue}" label="Service Request #" id="it3"
+                             inlineStyle="width:100%;" />
+              <amx:panelLabelAndMessage label="Service Request History" id="plam13">
+              <amx:panelGroupLayout id="pgl6" layout="vertical" scrollPolicy="scroll">
+                <amx:tableLayout id="tl1" halign="start" layout="weighted" width="70%" summary="Incident notes table">
+                    <amx:iterator var="row" value="#{bindings.notes1.collectionModel}" id="i4">                     
+                      <amx:rowLayout id="rl1">
+                        <amx:cellFormat id="cf1" shortDesc="Note item" valign="top" halign="start" width="70%"
+                                        inlineStyle="#{row.index % 2 ==0? 'background-color:#f7f7f7;':'background-color:#ffefd6;'} ">
+                            <amx:outputText value="#{row.message}" id="ot16"/>
+                        </amx:cellFormat>                       
+                      </amx:rowLayout>
+                  </amx:iterator>
+                  </amx:tableLayout>
+                </amx:panelGroupLayout>
+              </amx:panelLabelAndMessage>
+              <amx:selectOneChoice label="Current Service Status" id="smc1" value="#{bindings.status1.inputValue}"
+                                   inlineStyle="width:100%;">
+                <amx:selectItem id="si4" label="Status NEW" value="New"/>
+                <amx:selectItem label="Status PENDING" id="si5" value="InProgress"/>
+                <amx:selectItem label="Status CLOSE" id="si6" value="Complete"/>
+              </amx:selectOneChoice>
+              <amx:inputText value="#{bindings.notes.inputValue}" id="it1" rows="7" hintText="Add a Note!"
+                             label="Technician Note" inlineStyle="background-color:#f7f7f7;"/>
+              <amx:panelLabelAndMessage id="plam6" inlineStyle="width:100%;" label="">
+                <amx:spacer id="s6" height="5"/>
+                <amx:panelGroupLayout id="pgl2" layout="horizontal" halign="center" valign="middle">
+                  <amx:commandLink actionListener="#{bindings.updateIncidentStatus.execute}" id="cb2"
+                                   shortDesc="Submit" action="#{viewScope.sRDetailBacking.setServerUpdateMsg}">
+                    <amx:image id="i11" source="/images/application/ok_checkmark.png" shortDesc="Submit updates to MCS"/>
+                  </amx:commandLink>
+                  <amx:spacer id="s5" width="10"/>
+                  <amx:commandLink id="cl2" action="#{viewScope.sRDetailBacking.resetNotes}" shortDesc="Reset updates">
+                    <amx:image id="i2" source="/images/application/dismiss.png" shortDesc="Cancel note"/>
+                  </amx:commandLink>
+                </amx:panelGroupLayout>
+              </amx:panelLabelAndMessage>
+              <amx:panelLabelAndMessage label="" id="plam12" rendered='#{viewScope.sRDetailBacking.serverUpdateMsg != "" &amp;&amp; viewScope.sRDetailBacking.serverUpdateMsg != null}'
+                                        inlineStyle="text-align:center;">
+                <amx:outputText value="#{viewScope.sRDetailBacking.serverUpdateMsg}" id="ot15"
+                                inlineStyle="color:#424242; font-size:large;"/>
+              </amx:panelLabelAndMessage>
+            </amx:panelFormLayout>
+             
+            <amx:outputText value="#{bindings.dcMessage.inputValue}" id="ot6"
+                            inlineStyle="color:#e70000; font-size:11px; font-weight:bold;"/>
+          </amx:panelGroupLayout>
+        </amx:deck>
+          </amx:facet>
+           <amx:facet  name="bottom"/>
+        </amx:panelStretchLayout>
+  </amx:panelPage>
+</amx:view>

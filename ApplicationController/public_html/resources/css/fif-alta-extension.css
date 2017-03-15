@@ -1,0 +1,9 @@
+@charset "US-ASCII";
+
+.tab_button {
+  display:inline-block;
+  line-height:1px;
+}
+.amx-panelFormLayout{
+    border:0;
+}

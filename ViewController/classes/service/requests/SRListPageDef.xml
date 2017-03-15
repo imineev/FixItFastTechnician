@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pageDefinition xmlns="http://xmlns.oracle.com/adfm/uimodel" version="12.1.3.12.39" id="SRListPageDef"
+                Package="service.requests">
+  <parameters/>
+  <executables>
+    <variableIterator id="variables"/>
+    <iterator Binds="root" RangeSize="-1" DataControl="FiFTechnicianDC" id="FiFTechnicianDCIterator"/>
+    <accessorIterator MasterBinding="FiFTechnicianDCIterator" Binds="allIncidents" RangeSize="-1"
+                      DataControl="FiFTechnicianDC"
+                      BeanClass="oracle.mobile.cloud.sample.fif.technician.app.data.entities.Incident"
+                      id="allIncidentsIterator"/>
+  </executables>
+  <bindings>
+    <tree IterBinding="allIncidentsIterator" id="allIncidents">
+      <nodeDefinition DefName="oracle.mobile.cloud.sample.fif.technician.app.data.entities.Incident"
+                      Name="allIncidents0">
+        <AttrNames>
+          <Item Value="id"/>
+          <Item Value="title"/>
+          <Item Value="customerName"/>
+          <Item Value="status"/>
+          <Item Value="drivingTime"/>
+          <Item Value="priorityImg"/>
+          <Item Value="priority"/>
+          <Item Value="remoteImgLink"/>
+        </AttrNames>
+      </nodeDefinition>
+    </tree>
+    <methodAction id="resetQueriedIncidentData" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="resetQueriedIncidentData" IsViewObjectMethod="false" DataControl="FiFTechnicianDC"
+                  InstanceName="data.FiFTechnicianDC.dataProvider"/>
+    <methodAction id="clearCacheIncidentData" RequiresUpdateModel="true" Action="invokeMethod"
+                  MethodName="clearCacheIncidentData" IsViewObjectMethod="false" DataControl="FiFTechnicianDC"
+                  InstanceName="data.FiFTechnicianDC.dataProvider"/>
+  </bindings>
+</pageDefinition>

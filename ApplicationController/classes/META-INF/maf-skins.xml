@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adfmf-skins xmlns="http://xmlns.oracle.com/adf/mf/skin">
+   <skin id="s1">
+      <family>fiftech</family>
+      <id>fiftech</id>
+      <extends>mobileAlta-v1.3</extends>
+      <style-sheet-name>resources/css/fif-alta-extension.css</style-sheet-name>
+      <version>
+         <name>v1.0</name>
+      </version>
+   </skin>
+</adfmf-skins>

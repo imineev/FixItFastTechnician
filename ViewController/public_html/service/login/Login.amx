@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * @author Frank Nimphius
+ * @copyright Copyright (c) 2015 Oracle. All rights reserved.
+-->
+<amx:view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:amx="http://xmlns.oracle.com/adf/mf/amx"
+          xmlns:dvtm="http://xmlns.oracle.com/adf/mf/amx/dvt">
+  <amx:panelPage id="pp1">
+    <amx:facet name="header">
+      <amx:outputText value="Sign In" id="ot1"/>
+    </amx:facet>
+      <amx:panelStretchLayout id="psl1">
+        <amx:facet name="top">
+        <amx:panelGroupLayout id="pgl3" layout="horizontal" halign="center"
+                              inlineStyle="background-color:#bdd3e9; height:203px;">
+          <amx:image id="i1" source="/images/boilerplate/login_ifixitfast_236.png"
+                     inlineStyle="border-color:White; border-width:5px; position:center; width:200px; height:200px;"/>
+        </amx:panelGroupLayout>
+      </amx:facet>
+        <amx:facet name="center">
+          <amx:panelGroupLayout id="pgl1" layout="vertical" halign="center" valign="middle"
+                                inlineStyle="width:100%">
+          <amx:spacer id="s1" height="#{deviceScope.hardware.screen.height/10}"/>
+          <amx:panelGroupLayout id="pgl4" layout="vertical" inlineStyle="width:90%">
+            <amx:panelFormLayout id="pfl1"
+                                 labelPosition="topStart" fieldHalign="center" fieldWidth="100%" labelWidth="0%">
+              <amx:inputText id="it1" hintText="Username" inputType="text" inlineStyle="width:100%;"
+                             value="#{pageFlowScope.authenticationHandler.username}"/>
+              <amx:inputText id="it2" hintText="Password" inputType="text" secret="true" inlineStyle="width:100%; "
+                             value="#{pageFlowScope.authenticationHandler.password}"/>
+              <amx:panelLabelAndMessage label="" id="plam1"
+                                        inlineStyle="padding-top: 25px; width:100%; min-width:100%;">
+                <amx:commandButton text="Login" id="cb1" action="#{pageFlowScope.authenticationHandler.login}"
+                                   actionListener="#{bindings.resetDataControlMessages.execute}"/>
+              </amx:panelLabelAndMessage>
+            
+             </amx:panelFormLayout>
+            <amx:panelFormLayout id="pfl2" labelPosition="topStart" fieldHalign="center" fieldWidth="100%" labelWidth="0%">
+              <amx:panelLabelAndMessage id="plam2" inlineStyle="padding-top: 25px; width:100%; min-width:100%;">
+                <amx:outputText value="#{pageFlowScope.authenticationHandler.authenticationResponseMessage}" id="ot2"
+                                inlineStyle="width:100%; color:#e70000; font-size:large; text-align:center;"/>
+              </amx:panelLabelAndMessage>
+            </amx:panelFormLayout>
+          </amx:panelGroupLayout>
+        </amx:panelGroupLayout>
+        </amx:facet>
+        <amx:facet name="bottom"/>
+      </amx:panelStretchLayout>
+  </amx:panelPage>
+</amx:view>

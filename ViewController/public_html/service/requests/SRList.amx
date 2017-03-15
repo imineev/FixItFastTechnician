@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * @author Frank Nimphius
+ * @copyright Copyright (c) 2015 Oracle. All rights reserved.
+-->
+<amx:view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:amx="http://xmlns.oracle.com/adf/mf/amx"
+          xmlns:dvtm="http://xmlns.oracle.com/adf/mf/amx/dvt">
+  <amx:panelPage id="pp1">
+    <amx:facet name="header">
+      <amx:outputText value="FIF Technician Incidents" id="ot1"/>
+    </amx:facet>
+    <amx:facet name="secondary">
+    <amx:commandButton id="cb1" text="Reload All" icon="/images/application/func_reload.png" shortDesc="Query All From MCS"
+                                                   actionListener="#{bindings.resetQueriedIncidentData.execute}"
+                                                   action="#{viewScope.sRListBacking.resetFilterList}"/></amx:facet>
+    <amx:panelStretchLayout id="psl1">
+      <amx:facet name="top">
+        <amx:panelGroupLayout id="pgl2" layout="vertical" inlineStyle="width:100%">
+        <amx:panelGroupLayout id="pgl1" layout="horizontal" halign="end" inlineStyle="width:100%; padding-bottom:5px; height:40px; background-color:#e7e7e7;">
+        <amx:outputText value="Welcome #{pageFlowScope.authenticationHandler.username != null? pageFlowScope.authenticationHandler.username :'anonymous'}" id="ot11"
+                        inlineStyle="white-space:nowrap; font-size:large;"/>
+        <amx:spacer id="s1" width="10"/>
+        <amx:commandLink text="" id="cl1" shortDesc="Exit command" action="logout"
+                         actionListener="#{bindings.clearCacheIncidentData.execute}">
+          <amx:image id="i1" source="/images/application/func_arrowdoor_16_ena@2x.png" shortDesc="Exit icon"
+                     inlineStyle="width:32px; height:32px;"/>
+        </amx:commandLink>
+        <amx:spacer id="s2" width="10"/>
+      </amx:panelGroupLayout>
+        <amx:panelGroupLayout id="pgl11" inlineStyle="width:100%; height:50px;" halign="end" layout="horizontal"
+                                valign="middle">
+            <amx:selectOneChoice label="Select Filter and tap on Icon" id="smc1" value="#{viewScope.sRListBacking.incidentFilterCriteria}"
+                                 inlineStyle="width:300px; height:50px;">
+              <amx:selectItem id="si5" label="Status All" value="All"/>
+              <amx:selectItem label="Status New" id="si6" value="New"/>
+              <amx:selectItem label="Status In Progress" id="si7" value="InProgress"/>
+              <amx:selectItem label="Status Complete" id="si8" value="Complete"/>
+            </amx:selectOneChoice>
+            <amx:commandLink id="cl11" shortDesc="Invoke filter on incident list"
+                             actionListener="#{viewScope.sRListBacking.invokeFilterList}">
+              <amx:image id="i2" source="/images/application/filter.png" shortDesc="Filter image"
+                         inlineStyle="height:35px; width:35x; padding-right:10px;"/>
+            </amx:commandLink>
+          </amx:panelGroupLayout>
+        </amx:panelGroupLayout>
+      </amx:facet>      
+      <amx:facet name="center">      
+        <amx:listView var="row" value="#{bindings.allIncidents.collectionModel}" showMoreStrategy="autoScroll"
+                      fetchSize="#{bindings.allIncidents.rangeSize}" inlineStyle="width:100%;" 
+                      selectedRowKeys="#{bindings.allIncidents.collectionModel.selectedRow}"
+                      selectionListener="#{bindings.allIncidents.collectionModel.makeCurrent}" bufferStrategy="additive" id="lv1"
+                      bufferSize="300">
+          <amx:listItem id="li1" inlineStyle="height:80px; margin-top:2px; margin-bottom:1px;" shortDesc="Incident with the ID #{row.id}" action="drillDownFromPage">
+            <amx:tableLayout width="100%" id="tl2" shortDesc="Table">
+              <amx:rowLayout id="rl1">       
+                 <amx:cellFormat width="100px"  height="70px" inlineStyle="margin-right:5px;"
+                                 id="sr" valign="middle" shortDesc="Cell">
+                  <amx:panelGroupLayout id="status" layout="vertical" inlineStyle="width:100px;" halign="center">
+                  <amx:outputText value="#{row.status}" id="ot2" inlineStyle="font-size:15px; #{row.status == 'New'? ('color:#008400; font-weight:bold;') : ('color:#84adff;')};"/>
+                  <amx:outputText id="sridlab" value="Status" inlineStyle="font-size:11px;color:#595960"/>
+                  </amx:panelGroupLayout>
+                </amx:cellFormat>
+                <amx:cellFormat width="200px"  height="70px" inlineStyle="margin-right:5px;"
+                                id="cf7" valign="middle" shortDesc="Cell">
+                  <amx:outputText value="#{row.title}" id="ot3" inlineStyle="font-size:15px; color:#24607a;"/>
+                </amx:cellFormat>
+                <amx:cellFormat width="70px" halign="center" id="cf3" height="70px" shortDesc="Cell" inlineStyle="margin-right:5px;">
+               <amx:panelGroupLayout id="prioid" layout="vertical" inlineStyle="width:100px;" halign="center">
+                    <amx:image source="/images/application/#{row.priorityImg}" id="i11" shortDesc="Priority Image"
+                             inlineStyle="border:0px vertical-align:middle; width:40px; height:40px;"/>
+                  <amx:outputText id="pri" value="#{row.priority}" inlineStyle="font-size:11px;color:#595960"/>
+                  </amx:panelGroupLayout>
+                </amx:cellFormat>
+                  <amx:cellFormat id="c8" width="150px" halign="center" valign="middle" shortDesc="Cell"  height="70px" inlineStyle="margin-right:5px;">
+                  <amx:panelGroupLayout layout="vertical" id="drv" inlineStyle="width:100px;" halign="center">
+                      <amx:outputText id="drvTime" inlineStyle="font-size:15px;color:#47BDEF"
+                                      value="#{row.drivingTime}"/>
+                      <amx:outputText id="drvTimeLab" value="Drive Time" inlineStyle="font-size:11px;color:#595960"/>
+                    </amx:panelGroupLayout>
+                </amx:cellFormat>
+              </amx:rowLayout>
+            </amx:tableLayout>
+            <!-- set the selected incident id to teh data control for a call to show details -->  
+             <amx:setPropertyListener id="spl1" from="#{row.id}" to="#{pageFlowScope.taskFlowHelper.currentIncidentId}" type="action"/>     
+             <amx:setPropertyListener id="spl3" from="#{row.remoteImgLink}"
+                                     to="#{pageFlowScope.taskFlowHelper.currentIncidentImageLink}" type="action"/> 
+            <amx:setPropertyListener id="spl2" from="#{row.drivingTime}"
+                                     to="#{pageFlowScope.taskFlowHelper.drivingTime}" type="action"/>                                                                                
+          </amx:listItem>
+        </amx:listView>
+      </amx:facet>       
+      <amx:facet  name="bottom">
+        <amx:panelGroupLayout id="pgl4" scrollPolicy="scroll"
+                              inlineStyle="width:100%; background-color:#e7e7e7; height:400px;"
+                              halign="center" valign="middle"
+                              rendered="#{applicationScope.push_hasNewMessage == true || preferenceScope.application.debug.pushMessagesForDebug == true}">
+          <amx:deck id="d1" displayedChild="deck_#{applicationScope.push_hasNewMessage}" shortDesc="Push Notification Message">
+            <amx:panelGroupLayout id="deck_true">
+              <amx:panelGroupLayout id="pgl6">
+                <amx:outputText value="New Message " id="ot4" inlineStyle="font-size:large;"/>
+                <amx:panelFormLayout id="pfl1"
+                                     inlineStyle="width:80%; padding-bottom:10px; padding-left:10px; padding-right:10px; padding-top:10px;"
+                                     labelPosition="topStart">
+                  <amx:inputText label="incident" id="itd1" hintText="incident id number"
+                                 value="#{applicationScope.push_incidentId}"/>
+                  <amx:inputText label="message title" id="itd2" hintText="message title"
+                                 value="#{applicationScope.push_messageTitle}"/>
+                  <amx:inputText label="message" id="itd3" value="#{applicationScope.push_message}"
+                                 hintText="message body" rows="3"/>
+                </amx:panelFormLayout>
+              </amx:panelGroupLayout>
+              <amx:panelGroupLayout id="pgl3" halign="center" valign="middle" layout="horizontal">
+                <amx:commandButton text="Show Me" id="cb2" shortDesc="Show Details Button"
+                                   action="#{viewScope.sRListBacking.showPushMessage}">
+                </amx:commandButton>
+                <amx:commandButton text="Dismiss" id="cb3" shortDesc="Dismiss Button"
+                                   action="#{viewScope.sRListBacking.ignorePushMessage}">
+                </amx:commandButton>
+              </amx:panelGroupLayout>
+            </amx:panelGroupLayout>
+            <amx:transition triggerType="forwardNavigate" id="t1" transition="slideUp"/>
+            <amx:transition triggerType="backNavigate" id="t2" transition="slideDown"/>
+          </amx:deck>
+          <amx:panelGroupLayout id="pgl5" inlineStyle="visibility: #{preferenceScope.application.debug.pushMessagesForDebug == true? 'visible':'hidden'}">
+            <amx:outputText value="Debug" id="ot5" inlineStyle="font-size:large;"/>
+            <amx:panelFormLayout id="pfl2"
+                                 inlineStyle="width:80%; padding-bottom:10px; padding-left:10px; padding-right:10px; padding-top:10px;"
+                                 labelPosition="topStart">
+              <amx:inputText label="Notification" id="itd5" value="#{applicationScope.push_debug}"
+                             hintText="Debug Printout" rows="3"/>
+              <amx:inputText label="Device Token" id="it1" value="#{applicationScope.deviceToken}" hintText="Device Token"/>
+              <amx:inputText label="New Message ?" id="it2" value="#{applicationScope.push_hasNewMessage}" hintText="New Message"/>
+              <amx:inputText label="Error Messages" id="it3" value="#{applicationScope.push_errorMessage}" hintText="Notification Errors"
+                             rows="3"/>
+            </amx:panelFormLayout>
+          </amx:panelGroupLayout>
+        </amx:panelGroupLayout>
+      </amx:facet>
+      </amx:panelStretchLayout>
+  </amx:panelPage>
+</amx:view>
